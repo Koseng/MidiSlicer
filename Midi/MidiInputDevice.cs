@@ -390,8 +390,8 @@ namespace M
 				// in case the header is being used:
 				if(0!=_inHeader.dwFlags && MHDR_PREPARED!=(_inHeader.dwFlags & MHDR_PREPARED))
 					while ((_inHeader.dwFlags & MHDR_DONE) != MHDR_DONE)
-						Thread.Sleep(1);
-				_CheckInResult(midiInUnprepareHeader(_handle, ref _inHeader, sz));
+						Thread.Sleep(1);              
+                //_CheckInResult(midiInUnprepareHeader(_handle, ref _inHeader, sz)); // TODO HEIKO
 				_CheckInResult(midiInClose(_handle));
 				Marshal.FreeHGlobal(ptr);
 				_state = MidiInputDeviceState.Closed;
@@ -548,7 +548,7 @@ namespace M
 					Error?.Invoke(this, new MidiInputEventArgs(new TimeSpan(0, 0, 0, 0, wparam), MidiUtility.UnpackMessage(lparam)));
 					break;
 				case MIM_LONGERROR:
-
+					break;
 				case MIM_LONGDATA:
 					// TODO: Semi tested
 					var hdr = (MIDIHDR)Marshal.PtrToStructure(new IntPtr(lparam), typeof(MIDIHDR));
