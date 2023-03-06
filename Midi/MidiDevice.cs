@@ -59,6 +59,27 @@ namespace M
 				return result;
 			}
 		}
+
+		/// <summary>
+		/// Number of available MIDI input devices
+		/// </summary>
+		public static int InputsCount {
+			get {
+				var count = midiInGetNumDevs();
+				return count;
+			}
+        }
+
+		/// <summary>
+		/// Number of available MIDI output devices
+		/// </summary>
+		public static int OutputsCount {
+			get {
+				var count = midiOutGetNumDevs();
+				return count;
+			}
+		}
+
 		/// <summary>
 		/// Indicates the name of the MIDI device
 		/// </summary>
