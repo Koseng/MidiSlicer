@@ -29,10 +29,33 @@ namespace MidiMessageSender
         }
 
         private void OutputsComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {            
-            _device?.Close();            
-            _device = OutputsComboBox.SelectedItem as MidiOutputDevice;
-            _device.Open();
+        {
+            try
+            {
+                _device?.Close();
+                _device = OutputsComboBox.SelectedItem as MidiOutputDevice;
+                _device.Open();
+                EnableButtons();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not open midi device. In usage by other application?");
+                DisableButtons();
+            }
+        }
+
+        private void DisableButtons()
+        {
+            noteOnSendButton.Enabled = false;
+            noteOffSendButton.Enabled = false;
+            CCSendButton.Enabled = false;
+        }
+
+        private void EnableButtons()
+        {
+            noteOnSendButton.Enabled = true;
+            noteOffSendButton.Enabled = true;
+            CCSendButton.Enabled = true;
         }
 
         private void noteOnSendButton_Click(object sender, EventArgs e)
@@ -61,7 +84,5 @@ namespace MidiMessageSender
             var message = new MidiMessageCC(controlId, value, channel);
             _device?.Send(message);
         }
-
-
     }
 }

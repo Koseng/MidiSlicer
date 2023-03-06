@@ -24,23 +24,29 @@ namespace MidiMonitor
 				InputsComboBox.SelectedIndex = 0;
 		}
 
-
         private void InputsComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			stringBuilder.Clear();
-			if (null != _device)
+			try
 			{
-				_device.Input -= device_Input;
-				_device.Close();
+				if (null != _device)
+				{
+					_device.Input -= device_Input;
+					_device.Close();
+				}
+				_device = InputsComboBox.SelectedItem as MidiInputDevice;
+				_device.Input += device_Input;
+				_device.Open();
+				_device.Start();
+				AddDeviceNameToLog();
 			}
-			_device = InputsComboBox.SelectedItem as MidiInputDevice;
-			_device.Input +=device_Input;
-			_device.Open();
-			_device.Start();
-			AddDeviceToLog();
+			catch (Exception)
+			{
+				MessageBox.Show("Could not open midi device. In usage by other application?");				
+			}
 		}
 
-		private void AddDeviceToLog()
+		private void AddDeviceNameToLog()
         {
 			if (null != _device)
 			{
@@ -53,8 +59,7 @@ namespace MidiMonitor
 		private void device_Input(object sender, MidiInputEventArgs args)
 		{
 			try
-			{
-				// string displayTimeValue = @$"{now:HH:mm}";
+			{			
 				string output = null;
 				if (args.Message is MidiMessageNoteOn)
                 {
@@ -105,7 +110,7 @@ namespace MidiMonitor
         {
 			stringBuilder.Clear();
 			MessagesTextBox.Text = string.Empty;
-			AddDeviceToLog();
+			AddDeviceNameToLog();
 		}
 
         private void logFileButton_Click(object sender, EventArgs e)
