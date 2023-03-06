@@ -118,12 +118,5 @@ namespace M
 			Close();
 			GC.SuppressFinalize(this);
 		}
-		/// <summary>
-		/// Closes the device if it's open
-		/// </summary>
-		~MidiDevice()
-		{
-			Close();
-		}
 	}
 }
